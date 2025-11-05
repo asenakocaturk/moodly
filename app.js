@@ -206,6 +206,29 @@ function exportCsv(){
   URL.revokeObjectURL(url);
 }
 document.getElementById("exportCsv").addEventListener("click", exportCsv);
+function importCsv(file){
+  const reader = new FileReader();
+  reader.onload = () => {
+    const lines = reader.result.split(/\r?\n/).filter(Boolean);
+    const header = lines.shift(); // "date,score,emotion,note"
+    const entries = loadEntries();
+    for(const line of lines){
+      const cols = line.split(",").map(s=>s.replace(/^"|"$/g,"").replace(/""/g,'"'));
+      const [date, score, emotion, note] = cols;
+      if(!date) continue;
+      entries.push({ id: crypto.randomUUID(), date, score:+score||3, emotion, note, createdAt: Date.now() });
+    }
+    saveEntries(entries);
+    renderEntries();
+    renderChartAndInsights();
+    alert("CSV içe aktarıldı ✅");
+  };
+  reader.readAsText(file, "utf-8");
+}
+document.getElementById("importCsv")?.addEventListener("change", (e)=>{
+  if(e.target.files && e.target.files[0]) importCsv(e.target.files[0]);
+});
+
 
 
 
