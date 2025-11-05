@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Moodly — MVP</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Chart.js CDN for simple weekly chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Moodly <span class="badge">MVP</span></h1>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Günlük Ruh Hali Kaydı</h2>
+      <form id="moodForm">
+        <label for="date">Tarih</label>
+        <input type="date" id="date" required />
+
+        <label for="score">Puan (1–5)</label>
+        <input type="range" id="score" min="1" max="5" value="3" oninput="scoreOut.textContent=value"/>
+        <output id="scoreOut">3</output>
+
+        <label for="emotion">Duygu</label>
+        <select id="emotion">
+          <option>Mutlu 😊</option>
+          <option>Sakin 😌</option>
+          <option>Endişeli 😟</option>
+          <option>Üzgün 😔</option>
+          <option>Öfkeli 😠</option>
+          <option>Yorgun 😴</option>
+        </select>
+
+        <label for="note">Not</label>
+        <textarea id="note" rows="3" placeholder="Bugün nasılsın?"></textarea>
+
+        <button type="submit">Kaydet</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Haftalık Özet</h2>
+      <canvas id="weeklyChart" height="160"></canvas>
+      <div id="insights" class="insights"></div>
+    </section>
+
+    <section class="card">
+      <h2>Kayıtlar</h2>
+      <div id="entries"></div>
+      <button id="clearAll" class="danger">Tümünü Sil</button>
+    </section>
+  </main>
+
+  <footer>
+    <small>Bu sürüm sadece tarayıcıda çalışır. Veriler cihazındaki yerel depoda tutulur.</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
