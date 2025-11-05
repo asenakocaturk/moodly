@@ -1,6 +1,9 @@
 // Tema (light/dark)
 const THEME_KEY = "moodly_theme";
-function applyTheme(t){ document.documentElement.classList.toggle("dark", t === "dark"); }
+function applyTheme(t){
+  document.documentElement.classList.toggle("dark", t === "dark");
+  document.body.classList.toggle("dark", t === "dark");
+}
 const savedTheme = localStorage.getItem(THEME_KEY);
 if(savedTheme){ applyTheme(savedTheme); }
 const toggleEl = document.getElementById("themeToggle");
