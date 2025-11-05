@@ -1,3 +1,17 @@
+// Tema (light/dark)
+const THEME_KEY = "moodly_theme";
+function applyTheme(t){ document.documentElement.classList.toggle("dark", t === "dark"); }
+const savedTheme = localStorage.getItem(THEME_KEY);
+if(savedTheme){ applyTheme(savedTheme); }
+const toggleEl = document.getElementById("themeToggle");
+if(toggleEl){
+  toggleEl.checked = (savedTheme === "dark");
+  toggleEl.addEventListener("change", (e)=>{
+    const t = e.target.checked ? "dark" : "light";
+    localStorage.setItem(THEME_KEY, t);
+    applyTheme(t);
+  });
+}
 // Simple localStorage-based MVP
 const STORAGE_KEY = "moodly_entries_v1";
 
@@ -173,20 +187,6 @@ function exportCsv(){
 }
 document.getElementById("exportCsv").addEventListener("click", exportCsv);
 
-// Tema (light/dark)
-const THEME_KEY = "moodly_theme";
-function applyTheme(t){ document.documentElement.classList.toggle("dark", t === "dark"); }
-const savedTheme = localStorage.getItem(THEME_KEY);
-if(savedTheme){ applyTheme(savedTheme); }
-const toggleEl = document.getElementById("themeToggle");
-if(toggleEl){
-  toggleEl.checked = (savedTheme === "dark");
-  toggleEl.addEventListener("change", (e)=>{
-    const t = e.target.checked ? "dark" : "light";
-    localStorage.setItem(THEME_KEY, t);
-    applyTheme(t);
-  });
-}
 
 
 
