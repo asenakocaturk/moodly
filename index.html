@@ -11,6 +11,17 @@
 <body>
   <!-- ÜST BAŞLIK -->
   <header>
+    <!-- ONBOARDING -->
+<div id="ob" class="card" style="display:none; border-left:6px solid var(--accent);">
+  <h2>Hoş geldin 👋</h2>
+  <p>Kayıtların tarayıcında saklanır. İstersen ayarlardan CSV ile yedekleyebilirsin.</p>
+  <label style="display:flex;align-items:center;gap:8px;margin:8px 0;">
+    <input type="checkbox" id="consentChk">
+    <span>Verilerimin bu cihazda yerel olarak tutulmasına onay veriyorum.</span>
+  </label>
+  <button id="startBtn" type="button">Tamam, başla</button>
+</div>
+
     <h1>Moodly <span class="badge">MVP</span></h1>
 
     <!-- Karanlık Mod Anahtarı (app.js bunu kullanıyor) -->
