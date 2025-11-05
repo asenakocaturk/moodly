@@ -54,6 +54,23 @@ function renderEntries(){
     wrap.appendChild(div);
   });
 }
+const edit = document.createElement("button");
+edit.textContent = "Düzenle";
+edit.onclick = ()=>{
+  // Formu kayıt verileriyle doldur
+  document.getElementById("date").value = e.date;
+  document.getElementById("score").value = e.score;
+  document.getElementById("scoreOut").textContent = e.score;
+  document.getElementById("emotion").value = e.emotion;
+  document.getElementById("note").value = e.note || "";
+  // Eski kaydı silip, kaydettiğimizde aynı gün üzerine yazacağız
+  const all = loadEntries();
+  all.splice(all.findIndex(x=>x.id===e.id),1);
+  saveEntries(all);
+  renderEntries();
+  renderChartAndInsights();
+};
+div.append(meta,note,edit); // edit'i de ekle
 
 function renderChartAndInsights(){
   const ctx = document.getElementById("weeklyChart");
