@@ -156,5 +156,22 @@ function showReminderIfNeeded(){
 
 // İlk yüklemede ve her kayıt sonrası hatırlatmayı değerlendir
 showReminderIfNeeded();
+function exportCsv(){
+  const rows = loadEntries()
+    .sort((a,b)=> a.date.localeCompare(b.date))
+    .map(e => [e.date, e.score, e.emotion, (e.note||"").replaceAll('"','""')]);
+  const header = ['date','score','emotion','note'];
+  const csv = [header, ...rows].map(r => r.map(v=>`"${String(v)}"`).join(',')).join('\n');
+
+  const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `moodly-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+document.getElementById("exportCsv").addEventListener("click", exportCsv);
+
 
 
