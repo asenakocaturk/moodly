@@ -4,11 +4,15 @@ function applyTheme(t){
   document.documentElement.classList.toggle("dark", t === "dark");
   document.body.classList.toggle("dark", t === "dark");
 }
+
+// 🔥 Varsayılan DARK
 const savedTheme = localStorage.getItem(THEME_KEY);
-if(savedTheme){ applyTheme(savedTheme); }
+const defaultTheme = savedTheme || "dark";
+applyTheme(defaultTheme);
+
 const toggleEl = document.getElementById("themeToggle");
-if(toggleEl){
-  toggleEl.checked = (savedTheme === "dark");
+if (toggleEl) {
+  toggleEl.checked = (defaultTheme === "dark");
   toggleEl.addEventListener("change", (e)=>{
     const t = e.target.checked ? "dark" : "light";
     localStorage.setItem(THEME_KEY, t);
