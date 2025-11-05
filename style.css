@@ -122,6 +122,12 @@ header{ position:sticky; top:0; z-index:5; background:#ffffffcc; backdrop-filter
 /* Küçük düzenler */
 label{ display:block; margin:12px 0 6px; color:var(--muted); font-weight:600; }
 output{ display:inline-block; margin-left:8px; color:var(--muted); }
+  main{
+  max-width:760px;
+  margin:0 auto;
+  padding:0 16px 64px;
+}
+
 
 
   color:var(--ink);
