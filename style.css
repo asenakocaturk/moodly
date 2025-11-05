@@ -1,4 +1,4 @@
-*{box-sizing:border-box}
+*{box-sizing:border-box}body{ font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
 :root{
   --bg:#f6f7f9; --card:#fff; --ink:#111; --muted:#60646c;
   --accent:#4f46e5; --danger:#b91c1c; --ring:#e5e7eb;
