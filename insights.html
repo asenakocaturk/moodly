@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="tr">
-<head><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Moodly — İçgörüler (V2)</title>
+  <title>Moodly — İçgörüler</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Chart.js (opsiyonel). Yüklenmezse metinler yine görünür. -->
+  <link rel="icon" href="logo-koi.svg" type="image/svg+xml" />
+  <!-- Chart.js opsiyonel; yüklenmezse metin özetleri yine görünür -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     .grid{display:grid;gap:12px}
@@ -19,21 +20,21 @@
     .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
     .controls button{padding:6px 10px;border-radius:8px;border:1px solid var(--ring);background:#fff;cursor:pointer}
     .controls button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-    textarea.small{width:100%;min-height:60px}
-    .save-bar{display:flex;gap:8px;align-items:center;margin-top:6px}
-    .warn{background:#fff9e6;border:1px solid #f3e3a1;padding:8px;border-radius:8px;margin:8px 0}
   </style>
 </head>
 <body>
   <header>
-    <h1>İçgörüler</h1>
-    <a href="index.html" style="margin-left:auto">← Geri</a>
+    <h1 class="brand">
+      <img src="logo-koi.svg" alt="Moodly" class="logo" />
+      <span class="badge">MVP</span>
+    </h1>
+    <a href="index.html" class="insights-link">← Geri</a>
   </header>
 
   <main class="grid">
     <section class="card">
       <h2>Haftalık / Aylık Özet</h2>
-      <div id="chartWarn" class="warn" style="display:none">Grafik bileşeni yüklenemedi. Metin özetleri gösteriliyor.</div>
+      <div id="chartWarn" class="muted" style="display:none">Grafik bileşeni yoksa metin özetleri gösteriliyor.</div>
       <div class="controls">
         <button id="btn7"  class="active" type="button">Son 7 gün</button>
         <button id="btn30" type="button">Son 30 gün</button>
@@ -53,37 +54,13 @@
     </section>
 
     <section class="card">
-      <h2>Mini Koç (A + B + C)</h2>
+      <h2>Mini Koç</h2>
       <div id="coach" class="grid"></div>
-    </section>
-
-    <section class="card">
-      <h2>Kişisel Tetikleyici Kelimeler</h2>
-      <p class="muted">Virgülle ayır. Örn: <em>uyku, kahve, toplantı, spor</em></p>
-      <div class="grid cols">
-        <div>
-          <h3>Pozitif</h3>
-          <textarea id="posWords" class="small" placeholder="enerji, odak, mutlu"></textarea>
-        </div>
-        <div>
-          <h3>Negatif</h3>
-          <textarea id="negWords" class="small" placeholder="stres, yorgun, uykusuz"></textarea>
-        </div>
-      </div>
-      <div class="save-bar">
-        <button id="saveWords" type="button">Kaydet</button>
-        <span id="saveMsg" class="muted"></span>
-      </div>
     </section>
   </main>
 
-  <footer>
-    <small class="muted">Veriler cihazındaki tarayıcıdan (localStorage) okunur; kimseye gönderilmez. • V2</small>
-  </footer>
-
 <script>
 (function(){
-  // === Veri okuma ===
   const STORAGE_KEY = "moodly_entries_v1";
   function loadEntries(){
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
@@ -93,13 +70,11 @@
     .map(e=>({...e, ts: new Date(e.date+"T00:00:00")}))
     .sort((a,b)=>a.ts-b.ts);
 
-  // === Yardımcılar ===
   function groupByDay(rows){
     const m = new Map();
     rows.forEach(e=>{
-      const d = e.date;
-      if(!m.has(d)) m.set(d, []);
-      m.get(d).push(e.score);
+      if(!m.has(e.date)) m.set(e.date, []);
+      m.get(e.date).push(e.score);
     });
     const labels = [...m.keys()].sort();
     const scores = labels.map(d => Math.round(m.get(d).reduce((a,b)=>a+b,0)/m.get(d).length));
@@ -108,39 +83,23 @@
   function lastNDays(rows, n){
     const byDay = groupByDay(rows);
     const start = Math.max(0, byDay.labels.length - n);
-    return {
-      labels: byDay.labels.slice(start),
-      scores: byDay.scores.slice(start)
-    };
+    return { labels: byDay.labels.slice(start), scores: byDay.scores.slice(start) };
   }
   function topEmotions(rows, n=5){
     const freq = {};
     rows.forEach(e=>{ freq[e.emotion] = (freq[e.emotion]||0) + 1; });
     return Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,n);
   }
-  // Güvenli (basit) kelime ayırma: sadece harf ve sayı dışını boşluk yap, sonra boşluklardan böl.
   function topWords(rows, n=15){
     const freq = {};
     const text = rows.map(e=>(e.note||"").toLowerCase()).join(" ");
     const cleaned = text.replace(/[^a-z0-9çğıöşü\s]/gi," ");
     const STOP = new Set(["ve","de","da","bir","cok","çok","mi","mı","mu","mü","ile","ama","gibi","bu","şu","su","o","icin","için","the","a","to","of","in","on","at","is","are"]);
-    cleaned.split(/\s+/)
-      .filter(w=>w && !STOP.has(w) && w.length>2)
+    cleaned.split(/\s+/).filter(w=>w && !STOP.has(w) && w.length>2)
       .forEach(w=>{ freq[w] = (freq[w]||0) + 1; });
     return Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,n);
   }
 
-  // === Kişisel kelimeler ===
-  const WKEY = "moodly_custom_words_v1";
-  function loadWordSets(){
-    try { return JSON.parse(localStorage.getItem(WKEY)) || {pos:["enerji","odak","mutlu"], neg:["stres","yorgun","uyku"]}; }
-    catch { return {pos:["enerji","odak","mutlu"], neg:["stres","yorgun","uyku"]}; }
-  }
-  function saveWordSets(posArr, negArr){
-    localStorage.setItem(WKEY, JSON.stringify({pos:posArr, neg:negArr}));
-  }
-
-  // === Koç Mantığı (A+B+C) ===
   function coachTips(rows, span){
     const slice = lastNDays(rows, span);
     const labels = slice.labels;
@@ -148,41 +107,25 @@
     const avg = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
     const trend = scores.length>1 ? (scores[scores.length-1]-scores[0]) : 0;
     const emos = topEmotions(rows,3).map(([k])=>k);
-    const words = topWords(rows,30).map(([w])=>w);
-
-    const {pos,neg} = loadWordSets();
-    const goodHit = words.some(w=>pos.includes(w));
-    const badHit  = words.some(w=>neg.includes(w));
-
     const tips = [];
     if(avg < 3){
       tips.push(["Düşük ortalama", "Bu hafta zor geçmiş. 3 soru: 1) Enerjini ne tüketti? 2) Kontrol edebileceğin tek küçük şey? 3) Yarın bunu 10 dk nasıl denerim?"]);
     } else {
-      tips.push(["Güçlü hafta", "İyi giden şeyi isimlendir; bunu 10–15 dk mini blok olarak takvimine ekle."]);
-    }
-    if(badHit){
-      tips.push(["Üretkenlik freni", "Notlarda negatif tetikleyiciler var. Yarın 15 dk 'yavaş başla': su + 2 dk nefes + 5 dk tek görev."]);
-    }
-    if(goodHit){
-      tips.push(["Hızlandırıcı", "Pozitif tetikleyiciler var. Aynı saatte 20 dk 'tek görev' odak bloğu planla."]);
+      tips.push(["Güçlü hafta", "İyi giden şeyi isimlendir; 10–15 dk mini blok olarak takvimine ekle."]);
     }
     if(emos.length){
-      tips.push(["Baskın duygu", `Sık görülen: ${emos.join(", ")}. Bu duygular hangi durumlarda tetikleniyor? Notlarına 3 örnek yaz.`]);
+      tips.push(["Baskın duygu", `Sık görülen: ${emos.join(", ")}. Bu duygular hangi durumda tetikleniyor? Notlarına 3 örnek yaz.`]);
     }
     if(trend < 0) tips.push(["Trend ↓", "Düşüş var. 7 saat uyku, 2 litre su, 20 dk yürüyüş hedefi koy."]);
     if(trend > 0) tips.push(["Trend ↑", "Gidişat iyi. Aynı saatlerde kayıt tut; ritim güçlendirir."]);
-
     return { labels, scores, avg, trend, tips };
   }
 
-  // === Render ===
   let chart, span = 7;
   function render(){
     const rows = ALL;
     const {labels, scores, avg, trend, tips} = coachTips(rows, span);
-
-    // Chart varsa çiz, yoksa uyarı göster
-    const hasChart = !!(window.Chart);
+    const hasChart = !!window.Chart;
     document.getElementById("chartWarn").style.display = hasChart ? "none" : "block";
     const ctx = document.getElementById("avgChart");
     if(hasChart){
@@ -192,13 +135,12 @@
         data:{ labels, datasets:[{label:"Günlük Ortalama", data:scores, tension:.35}] },
         options:{ responsive:true, scales:{ y:{min:1,max:5,ticks:{stepSize:1}} } }
       });
-    }else{
-      // Chart yoksa canvas'ı gizle
+    } else {
       ctx.style.display = "none";
     }
-
-    const avgText = document.getElementById("avgText");
-    avgText.textContent = scores.length ? `Ortalama: ${avg.toFixed(2)} / 5. Trend: ${trend>0?"↑":trend<0?"↓":"→"}` : "Henüz yeterli veri yok.";
+    document.getElementById("avgText").textContent = scores.length ?
+      `Ortalama: ${avg.toFixed(2)} / 5. Trend: ${trend>0?"↑":trend<0?"↓":"→"}` :
+      "Henüz yeterli veri yok.";
 
     const emos = topEmotions(rows,5);
     document.getElementById("topEmotions").innerHTML =
@@ -206,16 +148,14 @@
       `<div class="muted">Henüz veri yok.</div>`;
 
     const words = topWords(rows,30);
-    const sets = loadWordSets();
     document.getElementById("topWords").innerHTML =
-      words.length ? words.map(([w,c])=>`<span class="pill ${sets.pos.includes(w)?"tag-good":(sets.neg.includes(w)?"tag-bad":"")}">${w} • ${c}</span>`).join("") :
+      words.length ? words.map(([w,c])=>`<span class="pill">${w} • ${c}</span>`).join("") :
       `<div class="muted">Not ekleyince burada en sık kelimeler görünecek.</div>`;
 
     document.getElementById("coach").innerHTML =
       tips.map(([title,text])=>`<div class="tip"><h3>${title}</h3><div>${text}</div></div>`).join("");
   }
 
-  // === Kontroller ===
   document.getElementById("btn7").addEventListener("click", ()=>{
     document.getElementById("btn7").classList.add("active");
     document.getElementById("btn30").classList.remove("active");
@@ -227,22 +167,6 @@
     span = 30; render();
   });
 
-  // === Kişisel kelimeler ===
-  (function initWords(){
-    const {pos,neg} = loadWordSets();
-    document.getElementById("posWords").value = pos.join(", ");
-    document.getElementById("negWords").value = neg.join(", ");
-  })();
-  document.getElementById("saveWords").addEventListener("click", ()=>{
-    const pos = document.getElementById("posWords").value.split(",").map(s=>s.trim().toLowerCase()).filter(Boolean);
-    const neg = document.getElementById("negWords").value.split(",").map(s=>s.trim().toLowerCase()).filter(Boolean);
-    saveWordSets(pos,neg);
-    document.getElementById("saveMsg").textContent = "Kaydedildi ✅";
-    setTimeout(()=>document.getElementById("saveMsg").textContent="", 1500);
-    render();
-  });
-
-  // === Başlat ===
   render();
 })();
 </script>
