@@ -142,9 +142,35 @@ output{ display:inline-block; margin-left:8px; color:var(--muted); }
   margin:0 auto;
   padding:0 16px 64px;
 }
-
-
-
-  color:var(--ink);
+  /* ——— HERO ——— */
+.hero{
+  position:relative; overflow:hidden; border-radius:16px; margin:12px 0 16px;
+  padding:22px 22px 26px; border:1px solid var(--ring);
+  background: radial-gradient(120% 120% at 0% 0%, #101626 0%, #0b0f1a 60%);
 }
-
+:root:not(.dark) .hero{
+  background: radial-gradient(120% 120% at 0% 0%, #dff2ff 0%, #cfeeff 60%);
+}
+.hero::before{
+  content:""; position:absolute; inset:-40% -10% auto -10%; height:70%;
+  background: repeating-linear-gradient( 0deg,
+    transparent 0 18px, rgba(255,255,255,.06) 18px 34px );
+  transform: rotate(-6deg);
+}
+:root:not(.dark) .hero::before{
+  background: repeating-linear-gradient(0deg, transparent 0 18px, rgba(79,70,229,.08) 18px 34px);
+}
+.hero-copy{ position:relative; z-index:1; max-width:520px; }
+.hero h2{ color:#fff; margin:0 0 6px; }
+:root:not(.dark) .hero h2{ color:#111; }
+.hero p{ color:rgba(255,255,255,.85); margin:0 0 10px; }
+:root:not(.dark) .hero p{ color:#222; }
+.hero-koi{
+  position:absolute; right:12px; bottom:-6px; height:84px; width:auto; opacity:.95;
+  animation: koiFloat 4s ease-in-out infinite;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.35));
+}
+@keyframes koiFloat{
+  0%,100%{ transform: translateY(0) rotate(-2deg); }
+  50%{ transform: translateY(-6px) rotate(2deg); }
+}
