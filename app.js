@@ -228,6 +228,25 @@ function importCsv(file){
 document.getElementById("importCsv")?.addEventListener("change", (e)=>{
   if(e.target.files && e.target.files[0]) importCsv(e.target.files[0]);
 });
+// Basit onboarding + yerel depolama onayı
+(function onboarding(){
+  const KEY = "moodly_onboarded_v1";
+  const ok = localStorage.getItem(KEY);
+  const box = document.getElementById("ob");
+  if(!box) return;
+  if(!ok){
+    box.style.display = "block";
+  }
+  const btn = document.getElementById("startBtn");
+  const chk = document.getElementById("consentChk");
+  if(btn){
+    btn.onclick = ()=>{
+      if(!chk.checked){ alert("Lütfen kutucuğu işaretle."); return; }
+      localStorage.setItem(KEY, "yes");
+      box.style.display = "none";
+    };
+  }
+})();
 
 
 
