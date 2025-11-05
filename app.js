@@ -107,6 +107,12 @@ document.getElementById("clearAll").addEventListener("click", ()=>{
     renderChartAndInsights();
   }
 });
+// Günlük hatırlatma
+const today = new Date().toISOString().slice(0,10);
+const hasEntryToday = loadEntries().some(e => e.date === today);
+if(!hasEntryToday){
+  alert("Bugün ruh halini kaydetmek ister misin? 😊");
+}
 
 // init date to today
 document.getElementById("date").value = new Date().toISOString().slice(0,10);
