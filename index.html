@@ -19,6 +19,15 @@
       <form id="moodForm">
         <label for="date">Tarih</label>
         <input type="date" id="date" required />
+        <!-- Günlük hatırlatma banner'ı -->
+<div id="reminder" class="reminder hidden">
+  <div><strong>Bugün kayıt girmedin.</strong> Hadi 10 saniye ayıralım 😊</div>
+  <div class="rem-actions">
+    <button id="addNow" type="button">Hemen ekle</button>
+    <button id="dismissRem" type="button" class="ghost">Kapat</button>
+  </div>
+</div>
+
 
         <label for="score">Puan (1–5)</label>
         <input type="range" id="score" min="1" max="5" value="3" oninput="scoreOut.textContent=value"/>
