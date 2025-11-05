@@ -30,17 +30,17 @@ footer{max-width:860px;margin:16px auto;padding:0 16px 24px;color:var(--muted)}
 .reminder button{ background:var(--accent); color:#fff; padding:6px 10px; border-radius:8px; }
 .reminder button.ghost{ background:transparent; color:var(--ink); border:1px solid var(--ring); }
 .hidden{ display:none; }
-@media (prefers-color-scheme: dark){
-  :root{
-    --bg:#0b0d12; --card:#11141a; --ink:#e6e8ec; --muted:#a6adbb;
-    --accent:#8b93f9; --danger:#ef4444; --ring:#1f2430;
-  }
-}
 :root.dark{
-  --bg:#0b0d12; --card:#11141a; --ink:#e6e8ec; --muted:#a6adbb;
-  --accent:#8b93f9; --danger:#ef4444; --ring:#1f2430;
+  --bg:#111;
+  --card:#1a1a1a;
+  --ink:#eee;
+  --muted:#bbb;
+  --accent:#8b93f9;
+  --danger:#ef4444;
+  --ring:#2a2a2a;
 }
-.theme-toggle{ margin-left:auto; display:flex; align-items:center; gap:6px; cursor:pointer; }
-.theme-toggle input{ display:none; }
-.theme-toggle span{ font-size:18px; user-select:none; }
+body.dark{
+  background:var(--bg);
+  color:var(--ink);
+}
 
