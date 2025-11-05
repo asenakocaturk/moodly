@@ -132,6 +132,8 @@ document.getElementById("moodForm").addEventListener("submit", (ev)=>{
   document.getElementById("scoreOut").textContent = 3;
   renderEntries();
   renderChartAndInsights();
+  showToast("Kayıt eklendi"); 
+  showToast("CSV içe aktarıldı");
 });
 
 document.getElementById("clearAll").addEventListener("click", ()=>{
