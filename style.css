@@ -42,6 +42,87 @@ footer{max-width:860px;margin:16px auto;padding:0 16px 24px;color:var(--muted)}
 body.dark{
   background:var(--bg);
   h2{font-size:1.2rem;font-weight:600;color:var(--accent);}
+  /* —— Görsel Temel —— */
+:root{
+  --bg:#f7f8fb; --card:#fff; --ink:#111; --muted:#6b7280;
+  --accent:#4f46e5; --accent-2:#8b93f9; --danger:#ef4444; --ring:#e5e7eb;
+}
+
+body{ background:var(--bg); color:var(--ink); }
+
+/* Kartlar */
+.card{
+  border:1px solid var(--ring);
+  border-radius:16px;
+  padding:20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.04);
+}
+
+/* Başlıklar */
+h1{ font-weight:800; letter-spacing:.2px; }
+h2{ font-size:1.1rem; font-weight:700; color:var(--accent); margin:0 0 12px; }
+
+/* Inputlar */
+input[type=date], select, textarea{
+  width:100%; padding:12px 12px;
+  border:1px solid var(--ring);
+  border-radius:12px; background:#fff;
+  transition: box-shadow .2s, border-color .2s;
+}
+input[type=range]{ width:100%; }
+input[type=date]:focus, select:focus, textarea:focus{
+  outline:0; border-color:var(--accent);
+  box-shadow:0 0 0 4px rgba(79,70,229,.15);
+}
+
+/* Butonlar (sınıf bazlı) */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 14px; border-radius:12px; border:1px solid transparent;
+  background:var(--accent); color:#fff; font-weight:600; cursor:pointer;
+  transition: transform .05s ease, filter .15s ease, background .2s;
+}
+.btn:hover{ filter:brightness(1.05); }
+.btn:active{ transform:translateY(1px); }
+
+.btn-ghost{
+  background:#fff; color:var(--ink); border-color:var(--ring);
+}
+.btn-danger{
+  background:var(--danger); color:#fff;
+}
+
+/* Liste görünümü */
+#entries{ display:grid; gap:12px; }
+.entry{ border:1px solid var(--ring); border-radius:12px; padding:12px; background:#fff; }
+.entry .meta{ font-size:12px; color:var(--muted); }
+.entry .note{ white-space: pre-wrap; }
+.entry .actions{ display:flex; gap:8px; margin-top:6px; }
+
+/* Header düzeni (logo + link + tema) */
+header{ position:sticky; top:0; z-index:5; background:#ffffffcc; backdrop-filter:saturate(1.1) blur(6px);
+  border-bottom:1px solid var(--ring); display:flex; align-items:center; gap:12px; padding:14px 16px; }
+.insights-link{ margin-left:auto; font-size:14px; }
+
+/* Karanlık mod iyileştirmeleri */
+:root.dark{
+  --bg:#0e1116; --card:#0f141b; --ink:#e6e8ec; --muted:#9aa4b2;
+  --accent:#8b93f9; --ring:#202634; --danger:#f05252;
+}
+:root.dark .card{ box-shadow: none; }
+
+/* Küçük “toast” bildirimi */
+#toast{
+  position:fixed; left:50%; bottom:24px; transform:translateX(-50%);
+  background:#111; color:#fff; padding:10px 14px; border-radius:12px;
+  font-size:14px; opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
+}
+#toast.show{ opacity:1; transform:translateX(-50%) translateY(-4px); }
+
+/* Küçük düzenler */
+label{ display:block; margin:12px 0 6px; color:var(--muted); font-weight:600; }
+output{ display:inline-block; margin-left:8px; color:var(--muted); }
+
 
   color:var(--ink);
 }
