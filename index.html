@@ -5,40 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Moodly — MVP</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Chart.js CDN for simple weekly chart -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- (İstersen grafik için insights sayfasında Chart.js kullanıyoruz) -->
 </head>
 <body>
+  <!-- ÜST BAŞLIK -->
   <header>
-    <h1>Moodly <span class="badge">MVP</span></h1><a href="insights.html" style="margin-left:12px;font-size:14px;">İçgörüler →</a>
+    <h1>Moodly <span class="badge">MVP</span></h1>
 
-    <a href="insights.html" style="margin-left:12px;font-size:14px;">İçgörüler →</a>
+    <!-- Karanlık Mod Anahtarı (app.js bunu kullanıyor) -->
+    <label class="theme-toggle" title="Karanlık Mod">
+      <input type="checkbox" id="themeToggle" />
+      <span>🌙</span>
+    </label>
 
+    <!-- İçgörüler sayfası linki (TEK ADET) -->
+    <a href="insights.html" class="insights-link">İçgörüler →</a>
   </header>
-  <label class="theme-toggle">
-  <input type="checkbox" id="themeToggle" />
-  <span>🌙</span>
-</label>
-
 
   <main>
+    <!-- GÜNLÜK KAYIT KARTI -->
     <section class="card">
       <h2>Günlük Ruh Hali Kaydı</h2>
+
+      <!-- Günlük hatırlatma banner'ı (app.js showReminderIfNeeded bunu yönetiyor) -->
+      <div id="reminder" class="reminder hidden">
+        <div><strong>Bugün kayıt girmedin.</strong> Hadi 10 saniye ayıralım 😊</div>
+        <div class="rem-actions">
+          <button id="addNow" type="button">Hemen ekle</button>
+          <button id="dismissRem" type="button" class="ghost">Kapat</button>
+        </div>
+      </div>
+
+      <!-- FORM -->
       <form id="moodForm">
         <label for="date">Tarih</label>
         <input type="date" id="date" required />
-        <!-- Günlük hatırlatma banner'ı -->
-<div id="reminder" class="reminder hidden">
-  <div><strong>Bugün kayıt girmedin.</strong> Hadi 10 saniye ayıralım 😊</div>
-  <div class="rem-actions">
-    <button id="addNow" type="button">Hemen ekle</button>
-    <button id="dismissRem" type="button" class="ghost">Kapat</button>
-  </div>
-</div>
-
 
         <label for="score">Puan (1–5)</label>
-        <input type="range" id="score" min="1" max="5" value="3" oninput="scoreOut.textContent=value"/>
+        <input type="range" id="score" min="1" max="5" value="3" oninput="scoreOut.textContent=value" />
         <output id="scoreOut">3</output>
 
         <label for="emotion">Duygu</label>
@@ -58,16 +62,23 @@
       </form>
     </section>
 
+    <!-- HAFTALIK ÖZET (ANA SAYFADAKİ KÜÇÜK GRAFİK) -->
     <section class="card">
       <h2>Haftalık Özet</h2>
       <canvas id="weeklyChart" height="160"></canvas>
       <div id="insights" class="insights"></div>
     </section>
-<button id="exportCsv">CSV Dışa Aktar</button>
-<input type="file" id="importCsv" accept=".csv" />
 
+    <!-- KAYIT LİSTESİ -->
     <section class="card">
       <h2>Kayıtlar</h2>
+
+      <!-- Dışa/İçe Aktarma -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+        <button id="exportCsv" type="button">CSV Dışa Aktar</button>
+        <input type="file" id="importCsv" accept=".csv" />
+      </div>
+
       <div id="entries"></div>
       <button id="clearAll" class="danger">Tümünü Sil</button>
     </section>
@@ -77,6 +88,7 @@
     <small>Bu sürüm sadece tarayıcıda çalışır. Veriler cihazındaki yerel depoda tutulur.</small>
   </footer>
 
+  <!-- UYGULAMA JS -->
   <script src="app.js"></script>
 </body>
 </html>
