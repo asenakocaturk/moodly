@@ -107,6 +107,7 @@ document.getElementById("clearAll").addEventListener("click", ()=>{
     renderChartAndInsights();
   }
 });
+
 // Günlük hatırlatma
 const today = new Date().toISOString().slice(0,10);
 const hasEntryToday = loadEntries().some(e => e.date === today);
@@ -120,3 +121,13 @@ document.getElementById("date").value = new Date().toISOString().slice(0,10);
 // initial render
 renderEntries();
 renderChartAndInsights();
+// Günlük hatırlatma (sayfa yüklendikten HEMEN sonra)
+setTimeout(()=>{
+  const today = new Date().toISOString().slice(0,10);
+  const hasEntryToday = loadEntries().some(e => e.date === today);
+  console.log("hatırlatma kontrolü:", { today, hasEntryToday });
+  if(!hasEntryToday){
+    alert("Bugün ruh halini kaydetmek ister misin? 😊");
+  }
+}, 300);
+
