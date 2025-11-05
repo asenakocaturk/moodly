@@ -130,4 +130,31 @@ setTimeout(()=>{
     alert("Bugün ruh halini kaydetmek ister misin? 😊");
   }
 }, 300);
+// Sayfa içi hatırlatma (banner)
+function showReminderIfNeeded(){
+  const wrap = document.getElementById("reminder");
+  if(!wrap) return;
+  const today = new Date().toISOString().slice(0,10);
+  const hasEntryToday = loadEntries().some(e => e.date === today);
+  if(hasEntryToday){ 
+    wrap.classList.add("hidden"); 
+    return;
+  }
+  wrap.classList.remove("hidden");
+
+  // Butonlar
+  document.getElementById("addNow").onclick = ()=>{
+    // Formu bugüne hazırla ve not kutusuna odakla
+    document.getElementById("date").value = today;
+    document.getElementById("note").focus();
+    wrap.classList.add("hidden");
+  };
+  document.getElementById("dismissRem").onclick = ()=>{
+    wrap.classList.add("hidden");
+  };
+}
+
+// İlk yüklemede ve her kayıt sonrası hatırlatmayı değerlendir
+showReminderIfNeeded();
+
 
