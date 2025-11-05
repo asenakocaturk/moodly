@@ -41,6 +41,8 @@ footer{max-width:860px;margin:16px auto;padding:0 16px 24px;color:var(--muted)}
 }
 body.dark{
   background:var(--bg);
+  h2{font-size:1.2rem;font-weight:600;color:var(--accent);}
+
   color:var(--ink);
 }
 
